@@ -3,6 +3,7 @@ package util
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"os"
 )
@@ -76,6 +77,10 @@ func SendMessage(channel string, body BodyElement, options *SenderOptions) error
 	err = json.NewDecoder(res.Body).Decode(jsonResponse)
 	if err != nil {
 		return err
+	}
+
+	if !jsonResponse.Ok {
+		return errors.New(jsonResponse.Error)
 	}
 
 	return nil

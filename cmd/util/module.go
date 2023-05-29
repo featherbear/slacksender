@@ -64,9 +64,15 @@ func RegisterModule(opts ModuleRegistration) Module {
 		Enable: func(scheduler *gocron.Scheduler) error {
 			job, err := module.IntervalFunction(scheduler).Do(
 				func() {
-
 					sendMessageFn := func(body BodyElement) {
-						SendMessage(module.Channel, body, &module.Sender)
+						err := SendMessage(module.Channel, body, &module.Sender)
+						if err != nil {
+							module.Logger.Warn("unable to send message",
+								zap.String("channel", module.Channel),
+								zap.Any("sender", module.Sender),
+								zap.Error(err),
+							)
+						}
 					}
 
 					module.Logger.Info("executing function")
