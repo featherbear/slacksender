@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func HelloWorld() Module {
+func helloWorld() Module {
 	return RegisterModule(ModuleRegistration{
 		Name:    "Hello World",
 		Channel: "#awong6-test-private",

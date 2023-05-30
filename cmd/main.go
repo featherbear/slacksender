@@ -27,7 +27,7 @@ func main() {
 
 	scheduler := gocron.NewScheduler(loc)
 
-	mods := []Module{privModules.Founders(), modules.HelloWorld()}
+	mods := append(privModules.Load(), modules.Load()...)
 
 	for _, module := range mods {
 		module.Initialise()
