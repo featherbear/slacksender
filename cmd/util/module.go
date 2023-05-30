@@ -21,8 +21,8 @@ type ModuleInternal struct {
 	Sender  SenderOptions
 
 	IntervalFunction   func(*gocron.Scheduler) *gocron.Scheduler
-	ExecFunction       func(sendMessage func(body BodyElement))
-	InitialiseFunction func() error
+	ExecFunction       func(Logger *zap.Logger, sendMessage func(body BodyElement))
+	InitialiseFunction func(Logger *zap.Logger) error
 
 	Job    *gocron.Job
 	Logger *zap.Logger
@@ -43,9 +43,9 @@ type ModuleRegistration struct {
 	IntervalFunction func(*gocron.Scheduler) *gocron.Scheduler
 
 	// Execution function
-	ExecFunction func(sendMessage func(body BodyElement))
+	ExecFunction func(Logger *zap.Logger, sendMessage func(body BodyElement))
 
-	Initialise func() error
+	Initialise func(Logger *zap.Logger) error
 }
 
 func RegisterModule(opts ModuleRegistration) Module {
@@ -76,7 +76,7 @@ func RegisterModule(opts ModuleRegistration) Module {
 					}
 
 					module.Logger.Info("executing function")
-					module.ExecFunction(sendMessageFn)
+					module.ExecFunction(module.Logger, sendMessageFn)
 				},
 			)
 
@@ -98,7 +98,7 @@ func RegisterModule(opts ModuleRegistration) Module {
 				return nil
 			}
 
-			err := module.InitialiseFunction()
+			err := module.InitialiseFunction(module.Logger)
 			if err != nil {
 				return err
 			}

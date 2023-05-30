@@ -4,20 +4,21 @@ import (
 	. "gradbot/util"
 
 	"github.com/go-co-op/gocron"
+	"go.uber.org/zap"
 )
 
 func HelloWorld() Module {
 	return RegisterModule(ModuleRegistration{
 		Name:    "Hello World",
-		Channel: "C04M53GKLH3",
+		Channel: "#awong6-test-private",
 		Sender: SenderOptions{
 			Name:  "Hello World",
 			Emoji: "indestructible",
 		},
 		IntervalFunction: func(s *gocron.Scheduler) *gocron.Scheduler {
-			return s.Every(10).Second()
+			return s.Every(1).Minute()
 		},
-		ExecFunction: func(sendMessage func(body BodyElement)) {
+		ExecFunction: func(Logger *zap.Logger, sendMessage func(body BodyElement)) {
 			sendMessage(PlainMessage("Hello, World!"))
 		},
 	})

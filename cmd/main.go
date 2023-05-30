@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"gradbot/modules"
+	"gradbot/privModules"
 	. "gradbot/util"
 
 	"github.com/go-co-op/gocron"
@@ -26,7 +27,7 @@ func main() {
 
 	scheduler := gocron.NewScheduler(loc)
 
-	mods := []Module{modules.HelloWorld()}
+	mods := []Module{privModules.Founders(), modules.HelloWorld()}
 
 	for _, module := range mods {
 		module.Initialise()
